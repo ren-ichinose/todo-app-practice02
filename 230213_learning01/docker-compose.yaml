@@ -5,6 +5,7 @@ services:
     tty: true
     ports:
       - 3005:3005
+      - 5555:5555
     volumes:
       - .:/app
       - /app/node_modules
