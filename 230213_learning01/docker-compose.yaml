@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  app:
+    build: .
+    tty: true
+    ports:
+      - 3005:3005
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db
+  db:
+    image: postgres:14.4-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ../230213_learning01_db/postgres/init.d:/docker-entrypoint-initdb.d
+      - ../230213_learning01_db/postgres/pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+      POSTGRES_DB: ${POSTGRES_DB}
+    hostname: postgres
+    restart: always
+    user: root
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 81:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - ../230213_learning01_db/pgadmin:/var/lib/pgadmin
+    depends_on:
+      - db
+networks:
+  lesson:
