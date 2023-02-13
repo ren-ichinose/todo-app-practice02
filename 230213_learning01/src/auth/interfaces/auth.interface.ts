@@ -1,5 +1,5 @@
 export interface Msg {
-  messege: string;
+  message: string;
 }
 
 export interface Csrf {
