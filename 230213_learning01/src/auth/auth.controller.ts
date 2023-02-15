@@ -30,4 +30,22 @@ export class AuthController {
     });
     return { message: 'ok'};
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('logout')
+  async logOut(
+    @Body() authDto: AuthDto, 
+    @Res({ passthrough: true }) res: Response
+  ): Promise<Msg> {
+    // 下記の記述方法も存在する
+    // res.clearCookie('accessToken');
+    res.cookie('accessToken', '', {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'none',
+      path: '/'
+    });
+    return { message: 'ok'};
+
+  }
 }
