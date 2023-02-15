@@ -46,6 +46,5 @@ export class AuthController {
       path: '/'
     });
     return { message: 'ok'};
-
   }
 }
