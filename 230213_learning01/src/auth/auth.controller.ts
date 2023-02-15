@@ -2,7 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/commo
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
-import { Jwt, Msg } from './interfaces/auth.interface';
+import { Msg } from './interfaces/auth.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -22,7 +22,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response
   ): Promise<Msg> {
     const jwt = await this.authService.login(authDto);
-    res.cookie('accessToken', jwt.accessToken, {
+    res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
       secure: false,
       sameSite: 'none',
@@ -35,8 +35,8 @@ export class AuthController {
   @Post('logout')
   async logOut(@Res({ passthrough: true }) res: Response): Promise<Msg> {
     // 下記の記述方法も存在する
-    // res.clearCookie('accessToken');
-    res.cookie('accessToken', '', {
+    // res.clearCookie('access_token');
+    res.cookie('access_token', '', {
       httpOnly: true,
       secure: false,
       sameSite: 'none',
