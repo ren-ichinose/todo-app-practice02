@@ -1,14 +1,19 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
-import { Msg } from './interfaces/auth.interface';
+import { Csrf, Msg } from './interfaces/auth.interface';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     ) {}
+
+  @Get('/csrf')
+  getCsrfToken(@Req() req: Request): Csrf {
+    return { csrfToken: req.csrfToken() };
+  }
 
   @Post('signup')
   async signUp(@Body() authDto: AuthDto): Promise<Msg> {
