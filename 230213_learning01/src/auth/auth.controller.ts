@@ -33,10 +33,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('logout')
-  async logOut(
-    @Body() authDto: AuthDto, 
-    @Res({ passthrough: true }) res: Response
-  ): Promise<Msg> {
+  async logOut(@Res({ passthrough: true }) res: Response): Promise<Msg> {
     // 下記の記述方法も存在する
     // res.clearCookie('accessToken');
     res.cookie('accessToken', '', {
