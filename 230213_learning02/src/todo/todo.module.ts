@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaModule } from 'src/prisma/prisma.module';
 import { TodoController } from './todo.controller';
 import { TodoService } from './todo.service';
 
 @Module({
-  imports: [PrismaService],
+  imports: [PrismaModule],
   controllers: [TodoController],
   providers: [TodoService],
 })
