@@ -26,3 +26,8 @@ model User {
   updatedAt      DateTime
   Task           Task[]
 }
+230213_learning01_front/tailwind.config.js        
+modified:   .DS_Store
+modified:   230213_learning01_front/.gitignore
+modified:   230213_learning01_front/package.json
+modified:   230213_learning01_front/styles/globals.css
