@@ -1,19 +1,26 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   Res,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
-import { Msg } from './interfaces/suth.interface';
+import { Csrf, Msg } from './interfaces/suth.interface';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authServoce: AuthService) {}
+
+  @Get('csrf')
+  getCsrfToken(@Req() req: Request): Csrf {
+    return { csrfToken: req.csrfToken() };
+  }
 
   @Post('signup')
   async signUp(@Body() authDto: AuthDto): Promise<Msg> {
@@ -38,9 +45,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('logout')
-  async logOut(
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<Msg> {
+  async logOut(@Res({ passthrough: true }) res: Response): Promise<Msg> {
     res.clearCookie('access_token');
     return { message: 'OK' };
   }
