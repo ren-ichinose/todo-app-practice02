@@ -36,7 +36,7 @@ export class AuthController {
     const jwt = await this.authServoce.logIn(authDto);
     res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
       path: '/',
     });

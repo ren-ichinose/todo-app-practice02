@@ -36,10 +36,26 @@ export class AuthController {
     const jwt = await this.authService.logIn(authDto);
     res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
       path: '/',
     });
     return { message: 'OK' };
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('logout')
+  async logOut(
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<Msg> {
+    res.clearCookie('access_token');
+    // res.cookie('access_token', '', {
+    //   httpOnly: true,
+    //   secure: false,
+    //   sameSite: 'none',
+    //   path: '/',
+    // });
+    return { message: 'OK' };
+  }
+
 }
