@@ -3,7 +3,7 @@ import { FC, ReactNode } from 'react'
 
 type Props = {
   title: string
-  childen: ReactNode
+  children: ReactNode
 }
 
 export const Layout: FC<Props> = ({ title, childen = 'Nextjs' }) => {
