@@ -1,10 +1,9 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
-import { Msg } from './interfaces/auth.interface';
+import { Jwt, Msg } from './interfaces/auth.interface';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 
 @Injectable()
@@ -12,7 +11,6 @@ export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
   ) {}
 
   async signUp(authDto: AuthDto): Promise<Msg> {
@@ -35,5 +33,22 @@ export class AuthService {
       }
       throw error;
     }
+  }
+
+  async login(authDto: AuthDto): Promise<Jwt> {
+    const { email, password } = authDto;
+    const user = await this.prismaService.user.findUnique({
+      where: { email },
+    });
+    if (!user || !(await bcrypt.compare(password, user.hashedPassword))) {
+      throw new ForbiddenException('Email or password incorrect');
+    }
+    return this.generateJwt(user.id, user.email);
+  }
+
+  async generateJwt(id: string, email: string): Promise<Jwt> {
+    const payload = { id, email };
+    const accessToken = await this.jwtService.signAsync(payload);
+    return { accessToken };
   }
 }
