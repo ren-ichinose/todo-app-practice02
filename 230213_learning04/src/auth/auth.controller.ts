@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -33,6 +34,13 @@ export class AuthController {
       sameSite: 'none',
       path: '/',
     });
+    return { message: 'ok' };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response): Msg {
+    res.clearCookie('access_token');
     return { message: 'ok' };
   }
 }
