@@ -54,4 +54,12 @@ export class TodoController {
     return await this.todoService.updateTask(updateTaskDto, id, user.id);
   }
 
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':id')
+  async deleteTask(
+    @Param('id') id: string,
+    @GetUser() user: Omit<User, 'hashedPassword'>,
+  ): Promise<void> {
+    await this.todoService.deleteTask(id, user.id);
+  }
 }

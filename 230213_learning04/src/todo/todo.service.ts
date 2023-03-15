@@ -52,4 +52,11 @@ export class TodoService {
     });
   }
 
+  async deleteTask(id: string, userId: string): Promise<void> {
+    const task = await this.getTaskById(id, userId);
+    if (!task) {
+      throw new ForbiddenException('No permision to delet');
+    }
+    await this.prismaService.task.delete({ where: { id } });
+  }
 }
