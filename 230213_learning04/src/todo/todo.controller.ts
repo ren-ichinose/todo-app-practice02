@@ -1,8 +1,20 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Task, User } from '@prisma/client';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
 import { createTaskDto } from './dto/create-task.dto';
+import { updateTaskDto } from './dto/update-task.dto';
 import { TodoService } from './todo.service';
 
 @UseGuards(AuthGuard('jwt'))
@@ -32,4 +44,14 @@ export class TodoController {
   ): Promise<Task> {
     return this.todoService.createTask(createTaskDto, user.id);
   }
+
+  @Patch(':id')
+  async updateTask(
+    @Body() updateTaskDto: updateTaskDto,
+    @Param('id') id: string,
+    @GetUser() user: Omit<User, 'hashedPassword'>,
+  ): Promise<Task> {
+    return await this.todoService.updateTask(updateTaskDto, id, user.id);
+  }
+
 }
