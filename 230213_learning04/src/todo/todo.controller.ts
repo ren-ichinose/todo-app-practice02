@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Task, User } from '@prisma/client';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
@@ -15,6 +15,14 @@ export class TodoController {
     @GetUser() user: Omit<User, 'hashedPassword'>,
   ): Promise<Task[]> {
     return await this.todoService.getTasks(user.id);
+  }
+
+  @Get(':id')
+  async getTaskById(
+    @Param('id') id: string,
+    @GetUser() user: User,
+  ): Promise<Task> {
+    return await this.todoService.getTaskById(id, user.id);
   }
 
   @Post()

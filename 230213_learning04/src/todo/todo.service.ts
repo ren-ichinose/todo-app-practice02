@@ -16,6 +16,10 @@ export class TodoService {
     return tasks;
   }
 
+  async getTaskById(id: string, userId: string): Promise<Task> {
+    return await this.prismaService.task.findFirst({ where: { id, userId } });
+  }
+
   async createTask(
     createTaskDto: createTaskDto,
     userId: string,
